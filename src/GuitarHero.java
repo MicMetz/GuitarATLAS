@@ -186,7 +186,7 @@ public class GuitarHero extends Application {
 					// (i.e., add the value returned by a call to the sample() method from
 					// all the guitar strings in your array)
 					double sample = 0;
-					// TODO: your code here
+					// TODO
 
 					// send the result to audio
 					AudioUtils.play(sample);

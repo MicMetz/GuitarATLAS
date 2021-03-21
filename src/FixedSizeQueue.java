@@ -37,8 +37,7 @@ public class FixedSizeQueue<T> implements Iterable<T> {
 	 */
 	private class Node {
 		T    value; // The data the node holds
-		Node next; // A pointer to the next node in the list (or null if this is the last node)
-
+		Node next;  // A pointer to the next node in the list (or null if this is the last node)
 
 
 		/**
@@ -53,8 +52,7 @@ public class FixedSizeQueue<T> implements Iterable<T> {
 	}
 
 	// Instance data
-	private Node head, tail; // Keep track of the first and last node in the list
-	private       int size;
+	private Node      head, tail; // Keep track of the first and last node in the list
 	private final int capacity; // Keep track of how many nodes are in the list and our total capacity
 
 
@@ -69,7 +67,7 @@ public class FixedSizeQueue<T> implements Iterable<T> {
 	 */
 	public FixedSizeQueue(int capacity) {
 		this.capacity = capacity;
-		size = 0;
+		this.head = this.tail = null;
 	}
 
 
@@ -80,9 +78,20 @@ public class FixedSizeQueue<T> implements Iterable<T> {
 	 * @return the number of nodes in the queue
 	 */
 	public int size() {
-		return this.size;
-	}
+		if (isEmpty()) {
+			System.out.println("The que is empty.");
+			return 0;
+		} else {
+			Node iter = this.head;
+			int  i    = 0;
+			while (iter != tail) {
+				iter = iter.next;
+				i++;
+			}
 
+			return i;
+		}
+	}
 
 
 	/**
@@ -91,7 +100,7 @@ public class FixedSizeQueue<T> implements Iterable<T> {
 	 * @return true if the queue is empty (has no nodes), false otherwise
 	 */
 	public boolean isEmpty() {
-		return size == 0;
+		return this.head == null;
 	}
 
 
@@ -101,7 +110,8 @@ public class FixedSizeQueue<T> implements Iterable<T> {
 	 * @return true if the queue is full (size == capacity), false otherwise
 	 */
 	public boolean isFull() {
-		return size == capacity-1;
+		int check = size();
+		return check == capacity-1;
 	}
 
 
@@ -131,18 +141,17 @@ public class FixedSizeQueue<T> implements Iterable<T> {
 	 *                               the capacity)
 	 */
 	public void enqueue(T value) {
-		if (isFull()) { System.out.println("Error - " + "can't enqueue. The queue is full."); }
-		else {
-			if (isEmpty()) {
-				head = new Node(value);
-				tail = head;
-			}
-			else {
+/*		if (isFull()) { System.out.println("Error - " + "can't enqueue. The queue is full."); }
+		else {*/
+		if (isEmpty()) {
+			this.head = new Node(value);
+			this.tail = this.head;
+		} else {
+			if (!isFull()) {
 				Node temp = new Node(value);
-				tail.next = temp;
-				tail = temp;
+				this.tail.next = temp;
+				this.tail = temp;
 			}
-			this.size++;
 		}
 	}
 
@@ -161,21 +170,16 @@ public class FixedSizeQueue<T> implements Iterable<T> {
 	 * @throws NoSuchElementException if the list is empty
 	 */
 	public T dequeue() {
+		T val = null;
+
 		if (!isEmpty()) {
-			if (!isFull()) {
-				T val = head.value;
-				if (head == tail) {
-					tail = null;
-					head = null;
-				} else {
-					head = head.next;
-				}
-				size--;
-				return val;
+			val = this.head.value;
+			this.head = this.head.next;
+			if (this.head == null) {
+				this.tail = null;
 			}
-			else { throw new NoSuchElementException("Error - " + "can't dequeue. The queue is empty."); }
 		}
-		else { throw new NoSuchElementException("Error - " + "can't dequeue. The queue is empty."); }
+		return val;
 	}
 
 
@@ -196,7 +200,7 @@ public class FixedSizeQueue<T> implements Iterable<T> {
 	public T peek() {
 		//		if (size == 0) throw new NoSuchElementException("Error - " + "can't peek as the queue is empty!");
 		if (isEmpty()) { return null; }
-		return head.value;
+		return this.head.value;
 	}
 
 

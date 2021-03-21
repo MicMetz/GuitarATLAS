@@ -64,7 +64,7 @@ public class GuitarString {
 		int N = (int) Math.ceil(44100 / frequency);
 		queue = new FixedSizeQueue<>(N);
 
-		for (int i = 0; i < queue.size(); i++) {
+		for (int i = 0; i < N-1; i++) {
 			queue.enqueue(0.0);
 		}
 	}
@@ -84,7 +84,7 @@ public class GuitarString {
 	public void pluck() {
 		for (int i = 0; i < queue.size(); i++) {
 			queue.dequeue();
-			queue.enqueue(Math.random() * ((-0.5 - 0.5) + 1) + -0.5);
+			queue.enqueue(Math.random() * ((-0.5 - 0.5) + 1.0) + -0.5);
 		}
 	}
 
@@ -105,15 +105,9 @@ public class GuitarString {
 	public void tic() {
 		double temp;
 
-		if (queue.isEmpty()) {
-			System.out.println("Error - " + "can't dequeue. The queue is empty.");
-		} else {
-			temp = queue.dequeue();
-			if (queue.isFull()) { System.out.println("Error - " + "can't enqueue. The queue is full."); } else {
-				queue.enqueue(((temp + queue.peek()) / 2) * ENGERGY_DECAY_FACTOR);
-				numTics++;
-			}
-		}
+		temp = queue.dequeue();
+		queue.enqueue(((temp + queue.peek()) / 2) * ENGERGY_DECAY_FACTOR);
+		numTics++;
 	}
 
 
