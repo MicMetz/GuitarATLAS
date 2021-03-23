@@ -61,10 +61,12 @@ public class GuitarString {
 	 * @param frequency The frequency for the guitar string
 	 */
 	public GuitarString(double frequency) {
+//		int N = (int) Math.ceil(440 / frequency);
 		int N = (int) Math.ceil(frequency);
+
 		queue = new FixedSizeQueue<>(N);
 
-		for (int i = 0; i < N-1; i++) {
+		for (int i = 0; i < N; i++) {
 			queue.enqueue(0.0);
 		}
 	}
@@ -80,9 +82,12 @@ public class GuitarString {
 	 * <p>
 	 */
 	public void pluck() {
+		double LOWER = -0.5;
+		double UPPER =  0.5;
 		for (int i = 0; i < queue.size(); i++) {
 			queue.dequeue();
-			queue.enqueue(Math.random() * ((-0.5 - 0.5) + 1.0) + -0.5);
+//			queue.enqueue(-0.5 + Math.random() * (0.5 - (-0.5)));
+			queue.enqueue(Math.random() * (UPPER - LOWER) + LOWER);
 		}
 	}
 
@@ -104,7 +109,11 @@ public class GuitarString {
 		double temp;
 
 		temp = queue.dequeue();
-		queue.enqueue(((temp + queue.peek()) / 2) * ENGERGY_DECAY_FACTOR);
+		double indat = ENGERGY_DECAY_FACTOR * ((temp + queue.peek()) / 2);
+		//		queue.enqueue(((temp + queue.peek()) / 2) * ENGERGY_DECAY_FACTOR);
+		//		double indat = ENGERGY_DECAY_FACTOR * (0.5 * (temp + queue.peek()));
+		queue.enqueue(indat);
+
 		numTics++;
 	}
 

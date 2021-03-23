@@ -7,7 +7,8 @@
  ### Author(s):     Michael Metz (mime9599@colorado.edu)                   ###
  ### Semester:      Spring 2021                                            ###
  ### Written:       March 16, 2021                                         ###
- ### Description:                                                          ###
+ ### Description:   JavaFX application that simulates plucking a guitar    ###
+ ###                string using the Karplus-Strong algorithm.             ###
  ### License:                                                              ###
  ### Credits:                                                              ###
  #############################################################################
@@ -50,7 +51,7 @@ public class GuitarHero extends Application {
 	public static final double CONCERT_A = 440.0;
 
 	// The keys the user can press to "play" the guitar/piano
-	public static final String                 KEYBOARD         = "q2we4r5ty7u8i9op-[=zxdcfvgbnjmk,.;/' ".toUpperCase();
+	public static final String KEYBOARD = "q2we4r5ty7u8i9op-[=zxdcfvgbnjmk,.;/' ".toUpperCase();
 
 	// How many "dots" to use in the guitar string visualization
 	public static final int                    NUM_TO_VISUALIZE = 100;
@@ -103,10 +104,12 @@ public class GuitarHero extends Application {
 		//  
 		HashMap<Character, GuitarString> guitarStringSet = new HashMap<>(37);
 		for (int i = 0; i < KEYBOARD.length(); i++) {
-/*			double freq = 44100.0;
-			freq *= Math.pow(2, (24 - i)/440.0);*/
-			double freq = 440.0;
-			freq *= Math.pow(1.05956, (24 - i));
+
+
+			double freq = 44100 * Math.pow(2, (22 - 1) / 12.0) / 440;
+			//			double freq = Math.pow(2, (22 - 1)/12.0);
+			//			double freq = 44100 * Math.pow(2, ((22 - i)/12.0));
+			//			double freq = Math.pow(1.05956, (22 - i)/12.0);
 			guitarStringSet.put(KEYBOARD.charAt(i), new GuitarString(freq));
 		}
 
@@ -174,7 +177,7 @@ public class GuitarHero extends Application {
 						// to get the char value of the key the user pressed and the
 						// String indexOf function to find out if the key the user
 						// pressed was one of the ones specified in KEYBOARD)
-						for (Character i : KEYBOARD.toCharArray()){
+						for (Character i : KEYBOARD.toCharArray()) {
 							if (key.getChar().charAt(0) == i) {
 								guitarStringSet.get(i).pluck();
 							}
