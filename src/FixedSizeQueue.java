@@ -200,7 +200,7 @@ public class FixedSizeQueue<T> implements Iterable<T> {
 	public T peek() {
 		//		if (size == 0) throw new NoSuchElementException("Error - " + "can't peek as the queue is empty!");
 		if (isEmpty()) { return null; }
-		return this.head.value;
+		return head.value;
 	}
 
 

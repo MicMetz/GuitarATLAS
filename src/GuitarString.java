@@ -61,7 +61,7 @@ public class GuitarString {
 	 * @param frequency The frequency for the guitar string
 	 */
 	public GuitarString(double frequency) {
-		int N = (int) Math.ceil(44100 / frequency);
+		int N = (int) Math.ceil(frequency);
 		queue = new FixedSizeQueue<>(N);
 
 		for (int i = 0; i < N-1; i++) {
@@ -78,8 +78,6 @@ public class GuitarString {
 	 * Set the queue to white noise by replacing all N items in the queue with N random
 	 * values between -0.5 and +0.5
 	 * <p>
-	 * TODO
-	 * iterate over queue
 	 */
 	public void pluck() {
 		for (int i = 0; i < queue.size(); i++) {
@@ -119,7 +117,7 @@ public class GuitarString {
 	 * @return The sample value currently at the front of the queue
 	 */
 	public double sample() {
-		if (queue.isEmpty()) { return 0.0; }
+//		if (queue.isEmpty()) { return 0.0; }
 		return queue.peek();
 	}
 

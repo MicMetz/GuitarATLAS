@@ -26,6 +26,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
 /**
  * The GuitarHero class is the main application. It creates a JavaFX application
@@ -101,10 +102,12 @@ public class GuitarHero extends Application {
 		//     experimenting with your own values to create other "instruments"
 		//  
 		HashMap<Character, GuitarString> guitarStringSet = new HashMap<>(37);
-		int i = 0;
-		for (char code : KEYBOARD.toCharArray()) {
-			guitarStringSet.put(code, new GuitarString(Math.pow((440 * 1.05956),(i - 24))));
-			i++;
+		for (int i = 0; i < KEYBOARD.length(); i++) {
+/*			double freq = 44100.0;
+			freq *= Math.pow(2, (24 - i)/440.0);*/
+			double freq = 440.0;
+			freq *= Math.pow(1.05956, (24 - i));
+			guitarStringSet.put(KEYBOARD.charAt(i), new GuitarString(freq));
 		}
 
 		// Set up the JavaFX stage, scene, and drawing canvas
@@ -165,15 +168,16 @@ public class GuitarHero extends Application {
 					// If the user has typed a key, pluck the appropriate guitar string
 					if (hasNextKeyTyped()) {
 						KeyCode key = nextKeyTyped();
-						// ADDITION
-						Set<String>            keySet           = new HashSet<String>(Arrays.asList(KEYBOARD));
+
 						// Check if the key the user typed is one of the keys
 						// specified in the KEYBOARD String (note: use key.getChar() 
 						// to get the char value of the key the user pressed and the
 						// String indexOf function to find out if the key the user
 						// pressed was one of the ones specified in KEYBOARD)
-						if (!keySet.add(key.getChar())) {
-							guitarStringSet.get(key.getChar()).pluck();
+						for (Character i : KEYBOARD.toCharArray()){
+							if (key.getChar().charAt(0) == i) {
+								guitarStringSet.get(i).pluck();
+							}
 						}
 
 						// If the key was one of the ones specified in KEYBOARD,
@@ -186,7 +190,9 @@ public class GuitarHero extends Application {
 					// (i.e., add the value returned by a call to the sample() method from
 					// all the guitar strings in your array)
 					double sample = 0;
-					// TODO
+					for (GuitarString i : guitarStringSet.values()) {
+						sample += i.sample();
+					}
 
 					// send the result to audio
 					AudioUtils.play(sample);
@@ -199,7 +205,9 @@ public class GuitarHero extends Application {
 
 					// Advance the simulation of each guitar string by one step
 					// (i.e., call the tic() method on all guitar strings in your array)
-					//TODO
+					for (GuitarString i : guitarStringSet.values()) {
+						i.tic();
+					}
 				}
 			}
 		};
